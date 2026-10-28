@@ -22,6 +22,11 @@ An enhancement for Open Journal Systems (OJS) that allows users to select author
 * `ojs-3.3.0-23.001-original/` — Original files from OJS 3.3.0-23.
 * `ojs-3.3.0-23.002-updated/` — Modified files implementing Author Autofill.
 
+Both directories contain the following files at their respective paths:
+
+* `lib/pkp/controllers/grid/users/author/form/PKPAuthorForm.inc.php`
+* `lib/pkp/templates/controllers/grid/users/author/form/authorForm.tpl`
+
 ## Installation
 
 This prototype modifies existing OJS/PKP files; it is not currently a standalone OJS plugin.
