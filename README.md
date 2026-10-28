@@ -12,6 +12,10 @@ An enhancement for Open Journal Systems (OJS) that allows users to select author
 * Automatically populate available author details, reducing repetitive data entry.
 * Simplify adding contributors to new submissions.
 
+### Example
+
+![OJS Add Contributor form with Author Autofill populated fields](author-autofill-example.png)
+
 ## Compatibility
 
 * **OJS version:** 3.3.0-23
