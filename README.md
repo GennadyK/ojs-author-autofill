@@ -1,4 +1,5 @@
 # ojs-author-autofill
+
 Autofill Contributor Details from Previously Used Authors
 
 # OJS Author Autofill
@@ -27,6 +28,12 @@ Both directories contain the following files at their respective paths:
 * `lib/pkp/controllers/grid/users/author/form/PKPAuthorForm.inc.php`
 * `lib/pkp/templates/controllers/grid/users/author/form/authorForm.tpl`
 
+## Known Limitations and Possible Improvements
+
+The current implementation may display multiple records with different IDs for the same author. It could be improved by displaying only the record with the highest ID for each author.
+
+There is always room for improvement, and community feedback and contributions are welcome.
+
 ## Installation
 
 This prototype modifies existing OJS/PKP files; it is not currently a standalone OJS plugin.
@@ -47,4 +54,3 @@ Feedback and testing by the OJS/PKP community are welcome. Please report compati
 ## License
 
 See the repository's license file. Original OJS/PKP copyright and license notices should be preserved in the source files.
-
