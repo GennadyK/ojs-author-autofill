@@ -10,7 +10,21 @@ An enhancement for Open Journal Systems (OJS) that allows users to select author
 
 * Select a previously used author from a dropdown list.
 * Automatically populate available author details, reducing repetitive data entry.
-* Simplify adding contributors to new submissions.
+* Support multilingual author information (e.g. English and Ukrainian).
+* Populate the following fields:
+
+  * Given name
+  * Family name
+  * Preferred public name
+  * Affiliation
+  * Biography (including TinyMCE editor content)
+  * Email
+  * Website URL
+  * ORCID
+  * Country
+* Automatically select the Author role by default, while allowing other roles to be selected.
+* Filter duplicate author records by name, retaining the record with the highest author ID.
+* Retrieve previously used authors from the current journal context.
 
 ### Example
 
@@ -34,7 +48,9 @@ Both directories contain the following files at their respective paths:
 
 ## Known Limitations and Possible Improvements
 
-The current implementation may display multiple records with different IDs for the same author. It could be improved by displaying only the record with the highest ID for each author.
+* Duplicate detection currently uses normalized given and family names. Two different authors with identical names may therefore be treated as the same person.
+* The implementation is currently designed for OJS 3.3.0-23 and has not been tested with other OJS versions.
+* The enhancement modifies core PKP/OJS files and must be reviewed when upgrading OJS.
 
 There is always room for improvement, and community feedback and contributions are welcome.
 
