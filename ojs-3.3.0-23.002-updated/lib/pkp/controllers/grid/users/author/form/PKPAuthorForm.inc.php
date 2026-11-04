@@ -168,59 +168,77 @@ class PKPAuthorForm extends Form {
 			'submissionId' => $publication->getData('submissionId'),
 			'publicationId' => $publication->getId(),
 			'countries' => $countries,
-			// CUSTOM: Past Author Autofill | 2026-10-25
-			// Provide previously used authors to the contributor form for autofill.
-			'previousAuthors' => $this->getPreviousAuthors($context->getId()),			
+
+			// CUSTOM: Past Author Autofill | 2026-11-04
+			// Provide previously used authors for the current journal context.
+			'previousAuthors' => $this->getPreviousAuthors($context->getId()),
+
 			'authorUserGroups' => $authorUserGroups,
 			'requireAuthorCompetingInterests' => $context->getData('requireAuthorCompetingInterests'),
 		));
 
 		return parent::fetch($request, $template, $display);
 	}
-	
-// CUSTOM: Past Author Autofill | 2026-10-25
-/**
- * Returns previously used authors for the current journal context.
- * Used to populate the author autofill dropdown in the contributor form.
- */
-function getPreviousAuthors($contextId) {
-    $authors = Services::get('author')->getMany([
-        'contextIds' => [$contextId],
-    ]);
 
-    $previousAuthors = [];
+	// CUSTOM: Past Author Autofill | 2026-11-04
+	/**
+	 * Retrieve previously used authors for the current journal context.
+	 *
+	 * Authors with matching names are grouped together, retaining only
+	 * the record with the highest author ID.
+	 *
+	 * @param int $contextId Current journal context ID.
+	 * @return array Previously used author records.
+	 */
+	function getPreviousAuthors($contextId) {
+		$authors = Services::get('author')->getMany([
+			'contextIds' => [$contextId],
+		]);
 
-    foreach ($authors as $author) {
-        $getText = function ($value) {
-            if (is_array($value)) {
-                foreach ($value as $text) {
-                    if ($text !== null && $text !== '') {
-                        return $text;
-                    }
-                }
-                return '';
-            }
+		$previousAuthors = [];
 
-            return $value ?? '';
-        };
+		foreach ($authors as $author) {
+			// Return the first available value from localized fields for name matching.
+			$getText = function ($value) {
+				if (is_array($value)) {
+					foreach ($value as $text) {
+						if ($text !== null && $text !== '') {
+							return $text;
+						}
+					}
+					return '';
+				}
 
-        $previousAuthors[] = [
-            'authorId' => $author->getId(),
-            'orcid' => $author->getOrcid(),
-            'biography' => $getText($author->getBiography(null)),
-            'givenName' => $getText($author->getGivenName(null)),
-            'familyName' => $getText($author->getFamilyName(null)),
-            'preferredPublicName' => $getText($author->getPreferredPublicName(null)),
-            'url' => $author->getUrl(),
-            'affiliation' => $getText($author->getAffiliation(null)),
-            'country' => $author->getCountry(),
-            'email' => $author->getEmail(),
-        ];
-    }
+				return $value ?? '';
+			};
 
-    return $previousAuthors;
-}
+			// Build a case-insensitive grouping key from the author's name.
+			$givenName = $getText($author->getGivenName(null));
+			$familyName = $getText($author->getFamilyName(null));
+			$key = mb_strtolower(trim($givenName . ' ' . $familyName));
 
+			// Retain the record with the highest author ID for each name.
+			if (
+				!isset($previousAuthors[$key]) ||
+				$author->getId() > $previousAuthors[$key]['authorId']
+			) {
+				$previousAuthors[$key] = [
+					'authorId' => $author->getId(),
+					'orcid' => $author->getOrcid(),
+					'biography' => $author->getBiography(null),
+					'givenName' => $author->getGivenName(null),
+					'familyName' => $author->getFamilyName(null),
+					'preferredPublicName' => $author->getPreferredPublicName(null),
+					'affiliation' => $author->getAffiliation(null),
+					'url' => $author->getUrl(),
+					'country' => $author->getCountry(),
+					'email' => $author->getEmail(),
+				];
+			}
+		}
+
+		return array_values($previousAuthors);
+	}
 
 	/**
 	 * Assign form data to user-submitted data.
@@ -310,5 +328,3 @@ function getPreviousAuthors($contextId) {
 		return $authorId;
 	}
 }
-
-
