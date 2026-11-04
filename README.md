@@ -11,17 +11,18 @@ An enhancement for Open Journal Systems (OJS) that allows users to select author
 * Select a previously used author from a dropdown list.
 * Automatically populate available author details, reducing repetitive data entry.
 * Support multilingual author information (e.g. English and Ukrainian).
-* Populate the following fields:
+* Populate the following fields in the same order as the OJS Add Contributor form:
 
   * Given name
   * Family name
   * Preferred public name
-  * Affiliation
-  * Biography (including TinyMCE editor content)
   * Email
+  * Country
   * Website URL
   * ORCID
-  * Country
+  * Affiliation
+  * Biography (including TinyMCE editor content)
+
 * Automatically select the Author role by default, while allowing other roles to be selected.
 * Filter duplicate author records by name, retaining the record with the highest author ID.
 * Retrieve previously used authors from the current journal context.
